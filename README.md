@@ -1,5 +1,7 @@
 # Controller_Design
 NUMERICAL VALIDATION OF A ROBUST POSITIONING CONTROLLER IN MACHINE TOOLS APPLICATION
+![Image](./[00] Misc/image.png)
+
 
 ## Running Tests
 
