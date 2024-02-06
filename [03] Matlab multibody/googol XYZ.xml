@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<SimscapeMultibodyImportXML version="2.0" xmlns="urn:mathworks:SimscapeMultibody:import" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Created by="" on="01/09/24||21:01:25" using="Simscape Multibody Link Version 7.0" from="SolidWorks 28.4.0"/>
+<ModelUnits mass="kilogram" length="millimeter"/>
+<DataUnits mass="kilogram" length="meter"/>
+<RootAssembly name="assem" uid="assem" version="208">
+<AssemblyFile name="assem.SLDASM" type="SolidWorks Assembly"/>
+<InstanceTree>
+<Instance name="table-1" uid="table-1" entityUid="table*:*Default">
+<Transform>
+<Rotation>-0.017452406437280844 0 -0.99984769515639149 0 1 0 0.99984769515639149 0 -0.017452406437280844</Rotation>
+<Translation>0.015376741539049265 0.05500510674362484 0.098869191777577262</Translation>
+</Transform>
+</Instance>
+<Instance name="CAD2-2" uid="CAD2-2" entityUid="CAD2*:*Default">
+<Transform>
+<Rotation>0.017452406437280844 0 0.99984769515639138 0 1 0 -0.99984769515639138 0 0.017452406437280844</Rotation>
+<Translation>0.015453535749517265 0.093505106743624833 0.094469654406400677</Translation>
+</Transform>
+</Instance>
+<Instance name="CAD-1" uid="CAD-1" grounded="true" entityUid="CAD*:*Default">
+<Transform>
+<Rotation>1 0 0 0 1 0 0 0 1</Rotation>
+<Translation>0 0 0</Translation>
+</Transform>
+</Instance>
+<Instance name="CAD2-1" uid="CAD2-1" grounded="true" entityUid="CAD2*:*Default">
+<Transform>
+<Rotation>-0.99984769515639127 0 0.017452406437280753 0 1 0 -0.017452406437280753 0 -0.99984769515639127</Rotation>
+<Translation>0.015361743823621869 0.02000510674362484 0.098868929991480725</Translation>
+</Transform>
+</Instance>
+<Instance name="spindle-1" uid="spindle-1" entityUid="spindle*:*Default">
+<Transform>
+<Rotation>1 0 0 0 1 0 0 0 1</Rotation>
+<Translation>0.0049999999999998795 0.28799000288665688 0.068500000000000047</Translation>
+</Transform>
+</Instance>
+<Instance name="table-3" uid="table-3" entityUid="table*:*Default">
+<Transform>
+<Rotation>1 0 0 0 -3.4914813388431334e-15 -1 0 1 -3.4914813388431334e-15</Rotation>
+<Translation>0.0049999999999999038 0.32299000288665619 0.030000000000004273</Translation>
+</Transform>
+</Instance>
+<Instance name="CAD2-3" uid="CAD2-3" entityUid="CAD2*:*Default">
+<Transform>
+<Rotation>-3.4914813388431334e-15 0 1 1 -3.4914813388431334e-15 3.4914813388431334e-15 3.4914813388431334e-15 1 0</Rotation>
+<Translation>0.0049999999999985299 0.39000000000000012 -0.0049999999999954551</Translation>
+</Transform>
+</Instance>
+<Instance name="table-2" uid="table-2" entityUid="table*:*Default">
+<Transform>
+<Rotation>0.99984769515639138 0 -0.017452406437280844 0 1 0 0.017452406437280844 0 0.99984769515639138</Rotation>
+<Translation>0.015496904979513931 0.12850510674362484 0.091985032883937126</Translation>
+</Transform>
+</Instance>
+<Instance name="spindle2-1" uid="spindle2-1" entityUid="spindle2*:*Default">
+<Transform>
+<Rotation>1 0 0 0 1 0 0 0 1</Rotation>
+<Translation>0.0049999999999998795 0.22057206399478205 0.10350000000000006</Translation>
+</Transform>
+</Instance>
+</InstanceTree>
+<Constraints>
+<Concentric name="Concentric1">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>CAD2-1</Uid>
+</InstancePath>
+<Position>0.1669705627484771 0.035000000000000003 -0.052500000000000005</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>table-1</Uid>
+</InstancePath>
+<Position>0.052500000000000005 0 0.050000000000000031</Position>
+<Axis>0 0 -1.0000000000000002</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Concentric name="Concentric3">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>CAD2-1</Uid>
+</InstancePath>
+<Position>0.16697056274847705 0.035000000000000003 0.052499999999999998</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>table-1</Uid>
+</InstancePath>
+<Position>-0.052500000000000019 0 0.050000000000000031</Position>
+<Axis>0 0 -1.0000000000000002</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Coincident name="Coincident1">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>table-1</Uid>
+</InstancePath>
+<Position>0 0.038499999999999993 0</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD2-2</Uid>
+</InstancePath>
+<Position>0 0 0</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Distance name="Distance1">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD2-2</Uid>
+</InstancePath>
+<Position>-0.15000000000000002 0.020000000000000004 -0.062500000000000014</Position>
+<Axis>0 0 -1.0000000000000002</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>table-1</Uid>
+</InstancePath>
+<Position>-0.075000000000000039 0.038499999999999993 0.06500000000000003</Position>
+<Axis>0 0 1.0000000000000002</Axis>
+</ConstraintGeometry>
+</Distance>
+<Concentric name="Concentric4">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>CAD2-2</Uid>
+</InstancePath>
+<Position>0.16697056274847716 0.035000000000000003 -0.052500000000000005</Position>
+<Axis>-1.0000000000000002 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>table-2</Uid>
+</InstancePath>
+<Position>-0.052500000000000005 0 0.050000000000000017</Position>
+<Axis>0 0 -1.0000000000000002</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Concentric name="Concentric5">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>CAD2-2</Uid>
+</InstancePath>
+<Position>0.16697056274847713 0.035000000000000003 0.052500000000000012</Position>
+<Axis>-1.0000000000000002 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>table-2</Uid>
+</InstancePath>
+<Position>0.052500000000000019 0 0.050000000000000017</Position>
+<Axis>0 0 -1.0000000000000002</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Coincident name="Coincident3">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD-1</Uid>
+</InstancePath>
+<Position>0 0 -0.004999999999999942</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD2-3</Uid>
+</InstancePath>
+<Position>0 0 0</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Distance name="Distance2">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD2-3</Uid>
+</InstancePath>
+<Position>-0.16500000000000009 0 0</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD-1</Uid>
+</InstancePath>
+<Position>-0.26000000000000012 0.29499999999999998 -0.004999999999999942</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+</Distance>
+<Distance name="Distance3">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD2-3</Uid>
+</InstancePath>
+<Position>-0.15000000000000005 0.02 -0.0625</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>CAD-1</Uid>
+</InstancePath>
+<Position>-0.26000000000000012 0.47000000000000003 -0.20499999999999999</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+</Distance>
+<Concentric name="Concentric6">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>CAD2-3</Uid>
+</InstancePath>
+<Position>0.1669705627484771 0.034999999999999996 0.052499999999999991</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>table-3</Uid>
+</InstancePath>
+<Position>0.052499999999999991 0 0.049999999999999989</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Concentric name="Concentric7">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>CAD2-3</Uid>
+</InstancePath>
+<Position>0.16697056274847699 0.034999999999999996 -0.052500000000000005</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>table-3</Uid>
+</InstancePath>
+<Position>-0.052500000000000005 0 0.049999999999999989</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Coincident name="Coincident7">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>spindle-1</Uid>
+</InstancePath>
+<Position>0.070000000000000007 0.070000000000000007 0</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>table-3</Uid>
+</InstancePath>
+<Position>0 0.038500000000000006 0</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Distance name="Distance4">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>spindle-1</Uid>
+</InstancePath>
+<Position>0.070000000000000007 0.070000000000000007 0</Position>
+<Axis>1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="line">
+<InstancePath>
+<Uid>table-3</Uid>
+</InstancePath>
+<Position>0.074999999999999997 0.038500000000000006 0.054999999999999993</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+</Distance>
+<Distance name="Distance5">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>spindle-1</Uid>
+</InstancePath>
+<Position>0 0.070000000000000007 0</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>table-3</Uid>
+</InstancePath>
+<Position>-0.074999999999999997 0.038499999999999993 -0.065000000000000002</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+</Distance>
+<Coincident name="Coincident10">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>spindle-1</Uid>
+</InstancePath>
+<Position>0 -0.052417938891874849 0.035000000000000017</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>spindle2-1</Uid>
+</InstancePath>
+<Position>0 0.014999999999999986 0</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Concentric name="Concentric9">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>spindle-1</Uid>
+</InstancePath>
+<Position>0 -0.03999999999999998 0.035000000000000017</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>spindle2-1</Uid>
+</InstancePath>
+<Position>0 0.014999999999999986 0</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+</Concentric>
+</Constraints>
+</RootAssembly>
+<Assemblies>
+</Assemblies>
+<Parts>
+<Part name="CAD" uid="CAD*:*Default" version="250">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="CAD.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>10.115287606015086</Mass>
+<CenterOfMass>1.0542661648852792e-07 0.13646119463776735 -0.031336551882651456</CenterOfMass>
+<Inertia>0.39108410291439177 0.49384775699643707 0.62790296965156533 0.026072600021907318 2.1355515287396765e-07 3.6295085708085151e-07</Inertia>
+</MassProperties>
+<GeometryFile name="CAD_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Diffuse r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Specular r="0.396078431372549" g="0.40980392156862744" b="0.46666666666666667" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.40000000596046448</Shininess>
+</VisualProperties>
+</Part>
+<Part name="CAD2" uid="CAD2*:*Default" version="465">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="CAD2.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>1.4918507902979239</Mass>
+<CenterOfMass>0.039492433158600113 0.023032356742650313 0</CenterOfMass>
+<Inertia>0.0020364955116277837 0.024260626212582261 0.023229594482428249 0 0 -0.00041051136702366294</Inertia>
+</MassProperties>
+<GeometryFile name="CAD2_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Diffuse r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Specular r="0.396078431372549" g="0.40980392156862744" b="0.46666666666666667" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.40000000596046448</Shininess>
+</VisualProperties>
+</Part>
+<Part name="spindle" uid="spindle*:*Default" version="165">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="spindle.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.70437352053058888</Mass>
+<CenterOfMass>0 0.035248843727663633 0.032697717731573595</CenterOfMass>
+<Inertia>0.0010250194000798046 0.00087209443440361791 0.0013953779344917691 -4.0354157836118775e-07 0 0</Inertia>
+</MassProperties>
+<GeometryFile name="spindle_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.69019607843137254" g="0.61176470588235299" b="0.52941176470588236" a="1"/>
+<Diffuse r="0.69019607843137254" g="0.61176470588235299" b="0.52941176470588236" a="1"/>
+<Specular r="0.55215686274509801" g="0.48941176470588243" b="0.42352941176470593" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.3125</Shininess>
+</VisualProperties>
+</Part>
+<Part name="spindle2" uid="spindle2*:*Default" version="112">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="spindle2.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.00080508134898514853</Mass>
+<CenterOfMass>0 0.0074999999999999997 0</CenterOfMass>
+<Inertia>1.8705284107502092e-08 7.2200176280611081e-09 1.8705284107502092e-08 0 0 0</Inertia>
+</MassProperties>
+<GeometryFile name="spindle2_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Diffuse r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Specular r="0.396078431372549" g="0.40980392156862744" b="0.46666666666666667" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.40000000596046448</Shininess>
+</VisualProperties>
+</Part>
+<Part name="table" uid="table*:*Default" version="238">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="table.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.39028429557831135</Mass>
+<CenterOfMass>0 0.022607325527924521 0</CenterOfMass>
+<Inertia>0.0005005604282306553 0.0013469670962798132 0.00098470369854661679 0 0 0</Inertia>
+</MassProperties>
+<GeometryFile name="table_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.6470588235294118" g="0.61960784313725492" b="0.58823529411764708" a="1"/>
+<Diffuse r="0.6470588235294118" g="0.61960784313725492" b="0.58823529411764708" a="1"/>
+<Specular r="0.45294117647058824" g="0.43372549019607842" b="0.41176470588235292" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.3125</Shininess>
+</VisualProperties>
+</Part>
+</Parts>
+</SimscapeMultibodyImportXML>
