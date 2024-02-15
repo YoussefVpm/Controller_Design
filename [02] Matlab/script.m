@@ -52,8 +52,8 @@ pid_1 = tf(C_Design1);
 pid_2 = tf(C_Design2);
 
 % PID TF
-numerator_pid = pid_1.Numerator;
-denominator_pid = pid_1.Denominator;
+numerator_pid = pid_2.Numerator;
+denominator_pid = pid_2.Denominator;
 pid_tf = tf(numerator_pid, denominator_pid);
 
 % closed & open loop TF
@@ -66,8 +66,9 @@ sys_CL = feedback(sys_OP, 1);
 % pid_tf = kp + ki/s + kd*s;
 
 %% Responds Analysis
-% Frequency vector for Bode and Nyquist plots
+close all;
 
+% Frequency vector for Bode and Nyquist plots
 % Bode plot
 figure;
 margin(sys_CL);
@@ -80,11 +81,11 @@ title('Nyquist Plot');
 
 figure;
 step(sys_CL);
-title('Nyquist Plot');
+title('Step response');
 
 
 %% Extract PID gains for simulink
-gains = pid_1.Numerator;
+gains = pid_2.Numerator{1};
 % PID gains
 new_kp = gains(2);
 new_ki = gains(3);
