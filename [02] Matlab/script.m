@@ -32,11 +32,11 @@ denominator = [1, B, C];      % 1, B, C respectively
 time_delay = Td;               % Time delay in seconds
 
 % Create the transfer function with time delay
-input = 'R(s)';
+inputt = 'R(s)';
 output = 'Y(s)';
-sys = tf(numerator, denominator, 'InputName', input, ...
+sys = tf(numerator, denominator, 'InputName', inputt, ...
                                  'OutputName', output, 'InputDelay', time_delay);
-sys_no_delay = tf(numerator, denominator, 'InputName', input, ...
+sys_no_delay = tf(numerator, denominator, 'InputName', inputt, ...
                                  'OutputName', output);
                              
 % Display the transfer function with time delay
@@ -44,26 +44,49 @@ disp('Transfer Function:');
 disp(sys);
 
 % SISO tool initialization PID
-sisotool(sys);
+% sisotool(sys);
 % pidtool(sys)
 
 %% Export from Design to TF
-pid_1 = tf(C_Design1);
-pid_2 = tf(C_Design2);
+% load designs
+path = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID design.mat';
+load(path);
+designs = ControlSystemDesignerSession.DesignerData;
+
+% select design data
+designChoice = input('Enter a Controller choice (1-4): ');
 
 % PID TF
-numerator_pid = pid_2.Numerator;
-denominator_pid = pid_2.Denominator;
+switch designChoice
+    case 1
+        pid_1 = tf(designs.Designs(1).Data.C);
+        numerator_pid = pid_1.Numerator;
+        denominator_pid = pid_1.Denominator;
+        gains = pid_1.Numerator{1};
+    case 2
+        pid_2 = tf(designs.Designs(2).Data.C);
+        numerator_pid = pid_2.Numerator;
+        denominator_pid = pid_2.Denominator;
+        gains = pid_2.Numerator{1};
+    case 3
+        pid_3 = tf(designs.Designs(3).Data.C);
+        numerator_pid = pid_3.Numerator;
+        denominator_pid = pid_3.Denominator;
+        gains = pid_3.Numerator{1};
+    case 4
+        pid_4 = tf(designs.Designs(4).Data.C);
+        numerator_pid = pid_4.Numerator;
+        denominator_pid = pid_4.Denominator;
+        gains = pid_4.Numerator{1};
+    otherwise
+        disp('Invalid choice. Please enter a number between 1 and 5!');
+end
+
 pid_tf = tf(numerator_pid, denominator_pid);
 
 % closed & open loop TF
 sys_OP = series(pid_tf,sys);
 sys_CL = feedback(sys_OP, 1);
-
-% Alternative PID
-% kp = 1; ki = 1; kd = 1;
-% s = tf('s');
-% pid_tf = kp + ki/s + kd*s;
 
 %% Responds Analysis
 close all;
@@ -85,7 +108,6 @@ title('Step response');
 
 
 %% Extract PID gains for simulink
-gains = pid_2.Numerator{1};
 % PID gains
 new_kp = gains(2);
 new_ki = gains(3);
@@ -103,3 +125,23 @@ new_kd = gains(1);
 % check: plot TF with and without delay
 bode(sys, 'b', sys_no_delay, 'r');
 legend ('TF', 'TF_no_delay','Location','southwest');
+
+% Disturbance
+subplot(2, 2, 1);
+plot(out.PID.time, out.PID.signals(1).values);
+title('PID Disturbance');
+
+% Error
+subplot(2, 2, 2);
+plot(out.PID.time, out.PID.signals(2).values);
+title('PID Error');
+
+% Reference
+subplot(2, 2, 3);
+plot(out.PID.time, out.PID.signals(3).values);
+title('PID Reference');
+
+% Ouput
+subplot(2, 2, 4);
+plot(out.PID.time, out.PID.signals(4).values);
+title('PID Ouput');
