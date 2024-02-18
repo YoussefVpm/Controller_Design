@@ -13,7 +13,7 @@
 
 %% Transfer Function
 
-close all; clc;
+close all; clc; clear;
 
 % SISO tool
 % Constants of Transfer Function
@@ -47,35 +47,34 @@ disp(sys);
 % sisotool(sys);
 % pidtool(sys)
 
-%% Export from Design to TF
+%% Manual Procedure
+% load designs
 path = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID design.mat';
 load(path);
-
 designs = ControlSystemDesignerSession.DesignerData;
 
-designs.Designs(1).Data.C;
-
+% select design data
 designChoice = input('Enter a Controller choice (1-4): ');
 
 % PID TF
 switch designChoice
     case 1
-        pid_1 = tf(C_Design1);
+        pid_1 = tf(designs.Designs(1).Data.C);
         numerator_pid = pid_1.Numerator;
         denominator_pid = pid_1.Denominator;
         gains = pid_1.Numerator{1};
     case 2
-        pid_2 = tf(C_Design2);
+        pid_2 = tf(designs.Designs(2).Data.C);
         numerator_pid = pid_2.Numerator;
         denominator_pid = pid_2.Denominator;
         gains = pid_2.Numerator{1};
     case 3
-        pid_3 = tf(C_Design3);
+        pid_3 = tf(designs.Designs(3).Data.C);
         numerator_pid = pid_3.Numerator;
         denominator_pid = pid_3.Denominator;
         gains = pid_3.Numerator{1};
     case 4
-        pid_4 = tf(C_Design4);
+        pid_4 = tf(designs.Designs(4).Data.C);
         numerator_pid = pid_4.Numerator;
         denominator_pid = pid_4.Denominator;
         gains = pid_4.Numerator{1};
@@ -108,21 +107,69 @@ step(sys_CL);
 title('Step response');
 
 
-%% Extract PID gains for simulink
-% PID gains
-new_kp = gains(2);
-new_ki = gains(3);
-new_kd = gains(1);
 
-% Alternative
-% a = 0.014898;
-% b = 2.073;
-% new_kp = a*b;
-% new_ki = a*b^2;
-% new_kd = a;
+
+%% For iteration procedure
+% Design 1
+% Ziegler_NicholsFrequencyResponse
+% SkogestadIMC
+% chien_Hrone_Reswick
+
+close all;
+
+path = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID design 2.mat';
+load(path);
+designs = ControlSystemDesignerSession.DesignerData;
+
+for i = 1:4
+    pid = tf(designs.Designs(i).Data.C);
+    numerator_pid = pid.Numerator;
+    denominator_pid = pid.Denominator;
+    gains = pid.Numerator{1};
+    
+    pid_tf = tf(numerator_pid, denominator_pid);
+
+    % closed & open loop TF
+    sys_OP = series(pid_tf,sys);
+    sys_CL = feedback(sys_OP, 1);
+    
+    % plot
+    figure
+    grid on
+    subplot(3,1,1);
+    step(sys_CL,'.-');
+    subplot(3,1,2);
+    nyquist(sys_CL,'r-');
+    subplot(3,1,3);
+    bodemag(1 / (1 + sys_CL),'g.-');
+    hold on
+    newPosition = [-425+(i/0.99)*450, 50, 450, 900]; % [left, bottom, width, height]
+    set(gcf, 'Position', newPosition,'Name','Design');
+end
 
 %% Data Plotting
 
 % check: plot TF with and without delay
 bode(sys, 'b', sys_no_delay, 'r');
 legend ('TF', 'TF_no_delay','Location','southwest');
+
+% Disturbance
+subplot(2, 2, 1);
+plot(out.PID.time, out.PID.signals(1).values);
+title('PID Disturbance');
+
+% Error
+subplot(2, 2, 2);
+plot(out.PID.time, out.PID.signals(2).values);
+title('PID Error');
+
+% Reference
+subplot(2, 2, 3);
+plot(out.PID.time, out.PID.signals(3).values);
+title('PID Reference');
+
+% Ouput
+subplot(2, 2, 4);
+plot(out.PID.time, out.PID.signals(4).values);
+title('PID Ouput');
+
