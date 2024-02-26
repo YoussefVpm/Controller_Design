@@ -11,6 +11,11 @@
 % Recommendation:
 %   1. require GM > 2 dB, PM > 30 deg (p45)
 
+% Selected data:
+%   PID design 1: 01
+%   PID design 2: 01, 02, 03*, 04
+%   PID design 3: 02*, 03*
+%   Best Four: 1-01, 2-01, 2-02, 2-04 
 %% Transfer Function
 
 close all; clc; clear;
@@ -26,6 +31,12 @@ Td = 0.0012;
 % s = tf('s')
 % sisotool((A/s^2+B*s+C)*exp(-s*Td), 1)
 
+% load cutting force data
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Dr Madiha\presentation\dis injected\dis1200.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Dr Madiha\presentation\dis injected\dis1800.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Dr Madiha\presentation\dis injected\dis2200.mat')
+
+
 % Define a transfer function with time delay
 numerator = A;             
 denominator = [1, B, C];      % 1, B, C respectively
@@ -34,8 +45,7 @@ time_delay = Td;               % Time delay in seconds
 % Create the transfer function with time delay
 inputt = 'R(s)';
 output = 'Y(s)';
-sys = tf(numerator, denominator, 'InputName', inputt, ...
-                                 'OutputName', output, 'InputDelay', time_delay);
+sys = tf(numerator, denominator, 'InputDelay', time_delay);
 sys_no_delay = tf(numerator, denominator, 'InputName', inputt, ...
                                  'OutputName', output);
                              
@@ -79,7 +89,8 @@ for i = 1:4
     subplot(3,1,2);
     nyquist(sys_CL,'r-');
     subplot(3,1,3);
-    bodemag(1 / (1 + sys_CL),'g.-');
+    margin(sys_OP)
+%     bodemag(1 / (1 + sys_CL),'g.-');
     hold on
     newPosition = [-425+(i/0.99)*450, 50, 450, 900]; % [left, bottom, width, height]
     set(gcf, 'Position', newPosition,'Name','Design');
@@ -137,25 +148,128 @@ new_kd = gains(1);
 close all;
 
 % Frequency vector for Bode and Nyquist plots
-% Bode plot
 figure;
-margin(sys_CL);
-title('Bode Plot');
+grid on
+newPosition = [300, 100, 1200, 800]; % [left, bottom, width, height]
+set(gcf, 'Position', newPosition,'Name','Design');
+
+% Margin plot
+subplot(2,2,1);
+bode(sys_CL);
 
 % Nyquist plot
-figure;
-nyquist(sys_CL);
+subplot(2,2,2);
+nyquist(sys_OP);
+axis([-1 1 -1 1]);
 title('Nyquist Plot');
 
-figure;
-step(sys_CL);
+% sensitivity plot
+subplot(2,2,3);
+bodemag(1 / (1 + sys_OP));
+ax = gca;
+ax.XScale = 'log'; % Set x-axis to log scale if desired
+grid on;
+xlim([0, 10]); % Set x-axis limits
+ylim([-5, 3]); % Set y-axis limits
+title('sensitivity CL');
+
+% step response
+subplot(2,2,4);
+step(sys_CL,'.-');
 title('Step response');
+
+%% plots for thesis book
+close all
+
+hfig = figure;
+margin(sys_OP);
+
+h = findall(gcf,'Type','line');
+
+% Modify the linewidth of the lines
+newLinewidth = 2;  % Adjust this value as needed
+for i = 1:length(h)
+    set(h(i), 'LineWidth', newLinewidth);
+end
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'margin','-dpdf','-painters','-fillpage')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+hfig = figure;
+nyquist(sys_OP);
+axis([-1.5 1.5 -1 1]);
+grid off
+
+h = findall(gcf,'Type','line');
+
+% Modify the linewidth of the lines
+newLinewidth = 1.5;  % Adjust this value as needed
+for i = 1:length(h)
+    set(h(i), 'LineWidth', newLinewidth);
+end
+
+% Plot a circle at (0,0) with radius 1
+hold on;
+rectangle('Position', [-1, -1, 2, 2], 'Curvature', [1, 1], 'EdgeColor', 'r', 'LineStyle', ':', 'LineWidth', 1);
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'nyquist','-dpdf','-painters','-fillpage')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Sensitivity 
+
+hfig = figure;
+Spid = 1 / (1 + sys_OP);
+bodemag(Spid);
+axis([1 3500 -35 10]);
+grid off
+
+h = findall(gcf,'Type','line');
+
+% Modify the linewidth of the lines
+newLinewidth = 1.5;  % Adjust this value as needed
+for i = 1:length(h)
+    set(h(i), 'LineWidth', newLinewidth);
+end
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 
 %% Data Plotting
 
 % check: plot TF with and without delay
-bode(sys, 'b', sys_no_delay, 'r');
-legend ('TF', 'TF_no_delay','Location','southwest');
+% bode(sys, 'b', sys_no_delay, 'r');
+% legend ('TF', 'TF_no_delay','Location','southwest');
+
+addpath('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab')
+out = sim('Googol_XY_machine_test.slx');
 
 % Disturbance
 subplot(2, 2, 1);
@@ -176,4 +290,3 @@ title('PID Reference');
 subplot(2, 2, 4);
 plot(out.PID.time, out.PID.signals(4).values);
 title('PID Ouput');
-
