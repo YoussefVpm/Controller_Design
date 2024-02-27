@@ -32,10 +32,9 @@ Td = 0.0012;
 % sisotool((A/s^2+B*s+C)*exp(-s*Td), 1)
 
 % load cutting force data
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Dr Madiha\presentation\dis injected\dis1200.mat')
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Dr Madiha\presentation\dis injected\dis1800.mat')
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Dr Madiha\presentation\dis injected\dis2200.mat')
-
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut1500down.csv')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut2500down.csv')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut3500down.csv')
 
 % Define a transfer function with time delay
 numerator = A;             
@@ -59,13 +58,13 @@ disp(sys);
 
 %% For iteration procedure
 % Design 1
+% Design 2 
 % Ziegler_NicholsFrequencyResponse
-% SkogestadIMC
-% chien_Hrone_Reswick
+% Design 4
 
 close all;
 
-path = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID design 2.mat';
+path = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID design.mat';
 load(path);
 designs = ControlSystemDesignerSession.DesignerData;
 
@@ -268,25 +267,147 @@ set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',
 % bode(sys, 'b', sys_no_delay, 'r');
 % legend ('TF', 'TF_no_delay','Location','southwest');
 
-addpath('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab')
-out = sim('Googol_XY_machine_test.slx');
+close all;
+
+% addpath('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab')
+% out = sim('Googol_XY_machine_test.slx');
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out with.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out without.mat')
 
 % Disturbance
-subplot(2, 2, 1);
-plot(out.PID.time, out.PID.signals(1).values);
+hfig = figure;
+plot(out_with.PID.time, out_with.PID.signals(1).values);
+grid on
 title('PID Disturbance');
 
-% Error
-subplot(2, 2, 2);
-plot(out.PID.time, out.PID.signals(2).values);
-title('PID Error');
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 
 % Reference
-subplot(2, 2, 3);
-plot(out.PID.time, out.PID.signals(3).values);
+hfig = figure;
+plot(out_with.PID.time, out_with.PID.signals(3).values);
+grid on
 title('PID Reference');
 
-% Ouput
-subplot(2, 2, 4);
-plot(out.PID.time, out.PID.signals(4).values);
-title('PID Ouput');
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+
+%__________________________________ERROR_________________________________%
+
+% Error
+hfig = figure;
+plot(out_with.PID.time, out_with.PID.signals(2).values, 'LineWidth', 1);
+hold on
+grid on
+title('PID Error');
+
+
+xSubset = out_with.PID.time(out_with.PID.time > 0.5);
+ySubset = out_with.PID.signals(2).values(out_with.PID.time > 0.5);
+[maxY, maxIndex] = max(ySubset);
+maxX = xSubset(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Trace a horizontal line at the maximum point
+plot([0, 15], [maxY, maxY], '--', 'Color', 'red');
+
+% Display the maximum point
+text(6, maxY+0.003, [' MTE = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+hfig = figure;
+plot(out_without.PID.time, out_without.PID.signals(2).values, 'LineWidth', 2);
+hold on
+grid on
+title('PID Error');
+
+
+xSubset = out_without.PID.time(out_without.PID.time > 0.5);
+ySubset = out_without.PID.signals(2).values(out_without.PID.time > 0.5);
+[maxY, maxIndex] = max(ySubset);
+maxX = xSubset(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Trace a horizontal line at the maximum point
+plot([0, 15], [maxY, maxY], '--', 'Color', 'red');
+
+% Display the maximum point
+text(6, maxY+0.003, [' MTE = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+
+%__________________ROOT MEAN SQAURE ERROR________________________________%
+
+RMSE = sqrt(mean(out_with.PID.signals(2).values.^2));
+
+%__________________Fast Fourier Transform________________________________%
+
+
+% Example time-domain data
+Fs = 500; % Sampling frequency (Hz)
+signal = out_with.PID.signals(2).values;
+
+% Perform FFT
+N = length(out_with.PID.signals(2).values);
+frequencies = Fs*(0:(N/2))/N;
+fft_result = fft(out_with.PID.signals(2).values);
+amplitude_spectrum = 2/N * abs(fft_result(1:N/2+1));
+
+fft_result_2 = fft(out_without.PID.signals(2).values);
+amplitude_spectrum_2 = 2/N * abs(fft_result_2(1:N/2+1));
+
+% Plot the time-domain signal and its frequency spectrum
+figure;
+plot(frequencies, amplitude_spectrum);
+hold on 
+plot(frequencies, amplitude_spectrum_2);
+title('Frequency Spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Amplitude');
+
+% Show the plot
+grid on;
+
+
+
