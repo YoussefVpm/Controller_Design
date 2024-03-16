@@ -84,7 +84,7 @@ bodemag(1 / (1 + V_OP),'g-');
 newPosition = [50, 50, 450, 900]; % [left, bottom, width, height]
 set(gcf, 'Position', newPosition,'Name','Design');
 
-%% Figure for Thesis book: Velocity
+%% Figure for Thesis book
 
 %%__________NYQUIST__________%%
 
@@ -213,28 +213,7 @@ disp(gain_P);
 P_OP = gain_P*P_series;
 P_CL = feedback(P_OP, 1);
 
-%% Plots Analysis
-close all
-
-figure
-grid on
-subplot(5,1,1);
-margin(P_OP);
-subplot(5,1,2);
-nyquist(P_OP,'r-');
-subplot(5,1,3);
-step(P_CL,'r-');
-subplot(5,1,4);
-bode(P_CL)
-subplot(5,1,5);
-bodemag(1 / (1 + P_OP),'g-');
-newPosition = [50, 50, 450, 900]; % [left, bottom, width, height]
-set(gcf, 'Position', newPosition,'Name','Design');
-
-%% Figure for Thesis book: Position
-
-%%__________MARGIN__________%%
-
+%% Plots
 close all
 
 hfig = figure;
@@ -257,10 +236,9 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'margin Posi OL','-dpdf','-painters','-fillpage')
+% print(hfig,'margin','-dpdf','-painters','-fillpage')
 
-%%__________NYQUIST__________%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 hfig = figure;
 nyquist(P_OP);
 axis([-1.5 1.5 -1 1]);
@@ -288,37 +266,13 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'nyquist Posi OL','-dpdf','-painters','-fillpage')
+% print(hfig,'margin','-dpdf','-painters','-fillpage')
 
-%%__________BODE CL__________%%
-
-hfig = figure;
-bode(P_CL);
-
-h = findall(gcf,'Type','line');
-
-% Modify the linewidth of the lines
-newLinewidth = 2;  % Adjust this value as needed
-for j = 1:length(h)
-    set(h(j), 'LineWidth', newLinewidth);
-end
-
-pictureWidth = 15;
-hw_ratio = 0.65;
-set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
-set(findall(hfig, '-property', 'Box'), 'Box', 'on')
-set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
-set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
-set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
-pos = get(hfig, 'Position');
-set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
-
-%%__________SENSITIVITY__________%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 hfig = figure;
-Spl = 1 / (1 + P_OP);
-bodemag(Spl);
+Spid = 1 / (1 + P_OP);
+bodemag(Spid);
 axis([1 3500 -35 10]);
 grid on
 
@@ -339,6 +293,6 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'sensitivity Posi OL','-dpdf','-painters','-fillpage')
+% print(hfig,'margin','-dpdf','-painters','-fillpage')
 
 
