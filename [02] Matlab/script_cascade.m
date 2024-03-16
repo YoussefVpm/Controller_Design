@@ -57,6 +57,9 @@ numerator_PI = PI.Numerator;
 denominator_PI = PI.Denominator;
 gains_PI = PI.Numerator{1};
 
+gain_V_P = gains_PI(1);
+gain_V_I = gains_PI(2);
+
 disp(PI);
 
 % PI transfer function
@@ -81,6 +84,44 @@ subplot(5,1,4);
 bode(V_CL)
 subplot(5,1,5);
 bodemag(1 / (1 + V_OP),'g-');
+newPosition = [50, 50, 450, 900]; % [left, bottom, width, height]
+set(gcf, 'Position', newPosition,'Name','Design');
+
+
+%% Position loop
+
+% position open loop
+P_series = (PI_TF*sys)/(1+PI_TF*sys*V_est);
+
+% siso tool init
+% sisotool(P_series);
+
+% velocity openloop
+pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
+load(pathPosition);
+gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
+
+disp(gain_P);
+
+% position open and closed loop
+P_OP = gain_P*P_series;
+P_CL = feedback(P_OP, 1);
+
+%% Plots Analysis
+close all
+
+figure
+grid on
+subplot(5,1,1);
+margin(P_OP);
+subplot(5,1,2);
+nyquist(P_OP,'r-');
+subplot(5,1,3);
+step(P_CL,'r-');
+subplot(5,1,4);
+bode(P_CL)
+subplot(5,1,5);
+bodemag(1 / (1 + P_OP),'g-');
 newPosition = [50, 50, 450, 900]; % [left, bottom, width, height]
 set(gcf, 'Position', newPosition,'Name','Design');
 
@@ -193,44 +234,6 @@ set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*picture
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity','-dpdf','-painters','-fillpage')
-
-%% Position loop
-
-% position open loop
-P_series = (PI_TF*sys)/(1+PI_TF*sys*V_est);
-
-% siso tool init
-% sisotool(P_series);
-
-% velocity openloop
-pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
-load(pathPosition);
-gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
-
-disp(gain_P);
-
-% position open and closed loop
-P_OP = gain_P*P_series;
-P_CL = feedback(P_OP, 1);
-
-%% Plots Analysis
-close all
-
-figure
-grid on
-subplot(5,1,1);
-margin(P_OP);
-subplot(5,1,2);
-nyquist(P_OP,'r-');
-subplot(5,1,3);
-step(P_CL,'r-');
-subplot(5,1,4);
-bode(P_CL)
-subplot(5,1,5);
-bodemag(1 / (1 + P_OP),'g-');
-newPosition = [50, 50, 450, 900]; % [left, bottom, width, height]
-set(gcf, 'Position', newPosition,'Name','Design');
-
 %% Figure for Thesis book: Position
 
 %%__________MARGIN__________%%
