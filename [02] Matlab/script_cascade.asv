@@ -91,12 +91,12 @@ set(gcf, 'Position', newPosition,'Name','Design');
 %% Position loop
 
 % position open loop
-P_series = (PI_TF*sys)/(1+PI_TF*sys*V_est);
+P_series = (PI_TF*sys)/(1+(PI_TF*sys*V_est));
 
 % siso tool init
 % sisotool(P_series);
 
-% velocity openloop
+% position openloop
 pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
 load(pathPosition);
 gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
@@ -127,7 +127,7 @@ set(gcf, 'Position', newPosition,'Name','Design');
 
 %% Figure for Thesis book: Velocity
 
-%%__________NYQUIST__________%%
+%%__________MARGIN__________%%
 
 hfig = figure;
 margin(V_OP);
@@ -234,6 +234,7 @@ set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*picture
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity','-dpdf','-painters','-fillpage')
+
 %% Figure for Thesis book: Position
 
 %%__________MARGIN__________%%
@@ -344,4 +345,255 @@ pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity Posi OL','-dpdf','-painters','-fillpage')
 
+%% Error Validation
+
+hfig = figure;
+Error = 5*(1+(PI_TF*sys*V_est))/(1+(PI_TF*sys*V_est)+(gain_P*PI_TF*sys));
+bodemag(Error);
+% Spid = 1 / (1 + sys_OP);
+% bodemag(Spid);
+% axis([1 2000 -35 10]);
+grid on
+
+h = findall(gcf,'Type','line');
+
+% Modify the linewidth of the lines
+newLinewidth = 1.5;  % Adjust this value as needed
+for i = 1:length(h)
+    set(h(i), 'LineWidth', newLinewidth);
+end
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+% print(hfig,'sensitivity','-dpdf','-painters','-fillpage')
+
+%% Data Plotting
+
+% check: plot TF with and without delay
+% bode(sys, 'b', sys_no_delay, 'r');
+% legend ('TF', 'TF_no_delay','Location','southwest');
+
+close all;
+
+% addpath('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab')
+% out = sim('Googol_XY_machine_test.slx');
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out with.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out without.mat')
+
+% Disturbance
+hfig = figure;
+plot(out_with.cascade.time, out_with.cascade.signals(1).values, 'LineWidth', 1);
+grid on
+xlabel('Time (s)')
+ylabel('Input disturbance (V)');
+title('Cutting Force Input Disturbance at 1500 RPM');
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'input disturbance','-dpdf','-painters','-fillpage')
+
+
+% Reference
+hfig = figure;
+plot(out_with.cascade.time, out_with.cascade.signals(3).values, 'LineWidth', 2);
+grid on
+xlabel('Time (s)');
+ylabel('Input Reference (mm)');
+title('Input Reference');
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'reference','-dpdf','-painters','-fillpage')
+
+
+%__________________________________ERROR_________________________________%
+
+%________Maximum Tracking Error_________%
+
+hfig = figure;
+plot(out_with.cascade.time, out_with.cascade.signals(2).values, 'LineWidth', 1);
+hold on
+grid on
+xlabel('Time (s)')
+ylabel('position Error With Disturbance (mm)')
+title('Cascade Tracking Error');
+
+xSubset = out_with.cascade.time(out_with.cascade.time > 0.5);
+ySubset = out_with.cascade.signals(2).values(out_with.cascade.time > 0.5);
+[maxY, maxIndex] = max(ySubset);
+maxX = xSubset(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Trace a horizontal line at the maximum point
+plot([0, 15], [maxY, maxY], '--', 'Color', 'red');
+
+% Display the maximum point
+text(6, maxY+0.003, [' MTE = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'error with','-dpdf','-painters','-fillpage')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+hfig = figure;
+plot(out_without.cascade.time, out_without.cascade.signals(2).values, 'LineWidth', 2);
+% axis([0 15 -0.005 0.005]);
+hold on
+grid on
+xlabel('Time (s)')
+ylabel('position Error Without Disturbance (mm)')
+title('Cascade Tracking Error');
+
+
+xSubset = out_without.cascade.time(out_without.cascade.time > 0.5);
+ySubset = out_without.cascade.signals(2).values(out_without.cascade.time > 0.5);
+[maxY, maxIndex] = max(ySubset);
+maxX = xSubset(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Trace a horizontal line at the maximum point
+plot([0, 15], [maxY, maxY], '--', 'Color', 'red');
+
+% Display the maximum point
+text(6, maxY+0.003, [' MTE = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'error without','-dpdf','-painters','-fillpage')
+
+%% __________________ROOT MEAN SQAURE ERROR_______________________________%
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out with.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out without.mat')
+
+RMSE_with = sqrt(mean(out_with.cascade.signals(2).values.^2));
+RMSE_without = sqrt(mean(out_without.cascade.signals(2).values.^2));
+
+percentage_variation = ((RMSE_without - RMSE_with)/RMSE_without)*100;
+disp(percentage_variation)
+
+%% _________________Fast Fourier Transform________________________________%
+
+% Example time-domain data
+Fs = 2000; % Sampling frequency (Hz)
+signal = out_with.cascade.signals(2).values;
+
+% Perform FFT
+N = length(out_with.cascade.signals(2).values);
+frequencies = Fs*(0:(N/2))/N;
+fft_result = fft(out_with.cascade.signals(2).values);
+amplitude_spectrum = 2/N * abs(fft_result(1:N/2+1));
+
+fft_result_2 = fft(out_without.cascade.signals(2).values);
+amplitude_spectrum_2 = 2/N * abs(fft_result_2(1:N/2+1));
+
+% Plot the frequency spectrum
+hfig = figure;
+plot(frequencies, amplitude_spectrum, 'LineWidth', 2);
+% axis([0 100 0 0.004]); 
+title('FFT Tracking Error cascade Without Error');
+xlabel('Frequency (Hz)');
+ylabel('Position Error Without Disturbance (mm)');
+hold on
+
+[maxY, maxIndex] = max(amplitude_spectrum);
+maxX = frequencies(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Display the maximum point
+text(maxX+2, maxY, [' Amplitude = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+% Show the plot
+grid on;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'FFT without','-dpdf','-painters','-fillpage')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+hfig = figure;
+plot(frequencies, amplitude_spectrum_2, 'LineWidth', 2);
+% axis([0 100 0 0.004]);
+title('FFT Tracking Error cascade With Error');
+xlabel('Frequency (Hz)');
+ylabel('Position Error With Disturbance (mm)');
+hold on
+
+[maxY, maxIndex] = max(amplitude_spectrum_2);
+maxX = frequencies(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Display the maximum point
+text(maxX+2, maxY, [' Amplitude = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+% Show the plot
+grid on;
+% Show the plot
+grid on;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'FFT with','-dpdf','-painters','-fillpage')
 

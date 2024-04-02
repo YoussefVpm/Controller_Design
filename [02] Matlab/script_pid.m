@@ -480,7 +480,6 @@ RMSE_without = sqrt(mean(out_without.PID.signals(2).values.^2));
 
 percentage_variation = ((RMSE_with - RMSE_without)/RMSE_with)*100;
 
-
 %% _________________Fast Fourier Transform________________________________%
 
 % Example time-domain data
