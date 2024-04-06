@@ -514,6 +514,8 @@ RMSE_with = sqrt(mean(out_with.cascade.signals(2).values.^2));
 RMSE_without = sqrt(mean(out_without.cascade.signals(2).values.^2));
 
 percentage_variation = ((RMSE_with - RMSE_without)/RMSE_without)*100;
+disp(RMSE_with)
+disp(RMSE_without)
 disp(percentage_variation)
 
 %% _________________Fast Fourier Transform____________________%
@@ -534,10 +536,10 @@ amplitude_spectrum_2 = 2/N * abs(fft_result_2(1:N/2+1));
 % Plot the frequency spectrum
 hfig = figure;
 plot(frequencies, amplitude_spectrum, 'LineWidth', 2);
-axis([0 1000 0 0.08]);
-title('FFT Tracking Error cascade Without Error');
+axis([0 1000 0 5e-3]);
+title('FFT Tracking Error cascade With Error');
 xlabel('Frequency (Hz)');
-ylabel('Position Error Without Disturbance (mm)');
+ylabel('Position Error With Disturbance (mm)');
 hold on
 
 [maxY, maxIndex] = max(amplitude_spectrum);
@@ -567,10 +569,10 @@ print(hfig,'FFT without','-dpdf','-painters','-fillpage')
 
 hfig = figure;
 plot(frequencies, amplitude_spectrum_2, 'LineWidth', 2);
-axis([0 1000 0 0.08]);
-title('FFT Tracking Error cascade With Error');
+axis([0 1000 0 5e-3]);
+title('FFT Tracking Error cascade Without Error');
 xlabel('Frequency (Hz)');
-ylabel('Position Error With Disturbance (mm)');
+ylabel('Position Error Without Disturbance (mm)');
 hold on
 
 [maxY, maxIndex] = max(amplitude_spectrum_2);
