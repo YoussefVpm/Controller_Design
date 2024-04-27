@@ -340,6 +340,7 @@ set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',
 
 close all;
 
+% addpath('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out with.mat')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out without.mat')
 
@@ -377,8 +378,8 @@ load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Mat
 
 RMSE_with = sqrt(mean(out_with.cascade.signals(2).values.^2));
 RMSE_without = sqrt(mean(out_without.cascade.signals(2).values.^2));
-percentage_variation = ((RMSE_with - RMSE_without)/RMSE_without)*100;
 
+percentage_variation = ((RMSE_with - RMSE_without)/RMSE_without)*100;
 disp(RMSE_with)
 disp(RMSE_without)
 disp(percentage_variation)

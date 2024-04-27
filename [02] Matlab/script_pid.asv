@@ -344,80 +344,201 @@ set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',
 
 close all;
 
+% addpath('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out with.mat')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out without.mat')
 
 % Disturbance
 titleText = 'Cutting Force Input Disturbance at 1500 RPM';
-plotn(out_with.PID.time, out_with.PID.signals(1).values, titleText)
+plotn(out_with.cascade.time, out_with.cascade.signals(1).values, titleText)
+
 
 % Reference
-titleText = 'Input Reference';
-plotn(out_with.PID.time, out_with.PID.signals(3).values, titleText)
+hfig = figure;
+plot(out_with.PID.time, out_with.PID.signals(3).values, 'LineWidth', 2);
+grid on
+xlabel('Time (s)');
+ylabel('Input Reference (mm)');
+title('Input Reference');
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'reference','-dpdf','-painters','-fillpage')
+
 
 %_____ERROR_____%
 
 %_____Maximum Tracking Error_____%
 
-xData = out_with.PID.time;
-yData = out_with.PID.signals(2).values;
-xLabel = 'Time (s)';
-yLabel = 'Position Error With Disturbance (mm)';
-titleText = 'PID Tracking Error';
-plotmte(xData, yData, xLabel, yLabel, titleText, 'error with', 'no');
+hfig = figure;
+plot(out_with.PID.time, out_with.PID.signals(2).values, 'LineWidth', 1);
+hold on
+grid on
+xlabel('Time (s)')
+ylabel('position Error With Disturbance (mm)')
+title('PID Tracking Error');
+
+xSubset = out_with.PID.time(out_with.PID.time > 0.5);
+ySubset = out_with.PID.signals(2).values(out_with.PID.time > 0.5);
+[maxY, maxIndex] = max(ySubset);
+maxX = xSubset(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Trace a horizontal line at the maximum point
+plot([0, 15], [maxY, maxY], '--', 'Color', 'red');
+
+% Display the maximum point
+text(6, maxY+0.003, [' MTE = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'error with','-dpdf','-painters','-fillpage')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xData = out_without.PID.time;
-yData = out_without.PID.signals(2).values;
-xLabel = 'Time (s)';
-yLabel = 'Position Error Without Disturbance (mm)';
-titleText = 'PID Tracking Error';
-plotmte(xData, yData, xLabel, yLabel, titleText, 'error without', 'no');
+hfig = figure;
+plot(out_without.PID.time, out_without.PID.signals(2).values, 'LineWidth', 2);
+axis([0 15 -0.005 0.005]);
+hold on
+grid on
+xlabel('Time (s)')
+ylabel('position Error Without Disturbance (mm)')
+title('PID Tracking Error');
 
-%% _____ROOT MEAN SQAURE ERROR_____
+
+xSubset = out_without.PID.time(out_without.PID.time > 0.5);
+ySubset = out_without.PID.signals(2).values(out_without.PID.time > 0.5);
+[maxY, maxIndex] = max(ySubset);
+maxX = xSubset(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Trace a horizontal line at the maximum point
+plot([0, 15], [maxY, maxY], '--', 'Color', 'red');
+
+% Display the maximum point
+text(6, maxY+0.003, [' MTE = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+hold off;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'error without','-dpdf','-painters','-fillpage')
+
+%% __________________ROOT MEAN SQAURE ERROR_______________________________%
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out with.mat')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out without.mat')
 
 RMSE_with = sqrt(mean(out_with.PID.signals(2).values.^2));
 RMSE_without = sqrt(mean(out_without.PID.signals(2).values.^2));
+
 percentage_variation = ((RMSE_with - RMSE_without)/RMSE_with)*100;
 
-disp(RMSE_with)
-disp(RMSE_without)
-disp(percentage_variation)
+%% _________________Fast Fourier Transform________________________________%
 
-%% _____Fast Fourier Transform_____
-
+% Example time-domain data
+Fs = 2000; % Sampling frequency (Hz)
 signal = out_with.PID.signals(2).values;
-plotTitle = 'FFT Tracking Error cascade With Error';
-yLabel = 'Position Error With Disturbance (mm)';
-plotfft(signal, plotTitle, yLabel);
+
+% Perform FFT
+N = length(out_with.PID.signals(2).values);
+frequencies = Fs*(0:(N/2))/N;
+fft_result = fft(out_with.PID.signals(2).values);
+amplitude_spectrum = 2/N * abs(fft_result(1:N/2+1));
+
+fft_result_2 = fft(out_without.PID.signals(2).values);
+amplitude_spectrum_2 = 2/N * abs(fft_result_2(1:N/2+1));
+
+% Plot the frequency spectrum
+hfig = figure;
+plot(frequencies, amplitude_spectrum, 'LineWidth', 2);
+axis([0 1000 0 0.004]); 
+title('FFT Tracking Error PID Without Error');
+xlabel('Frequency (Hz)');
+ylabel('Position Error Without Disturbance (mm)');
+hold on
+
+[maxY, maxIndex] = max(amplitude_spectrum);
+maxX = frequencies(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Display the maximum point
+text(maxX+2, maxY, [' Amplitude = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+% Show the plot
+grid on;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'FFT without','-dpdf','-painters','-fillpage')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% plot FFT disturbance 1500
-signal = out_with.PID.signals(1).values;
-plotTitle = 'FFT Disturbance';
-yLabel = 'Position Error of Disturbance';
-plotfft(signal, plotTitle, yLabel);
-
-%%
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut1500down.csv')
-
-% Step 1: Load the CSV data into MATLAB
-data = Cut1500down(:,2)*(1/ 2871.14); % Replace 'your_data.csv' with the path to your CSV file
-
-% Step 2: Perform FFT on the data
-Fs = 2000; % Sampling frequency (you may need to adjust this based on your data)
-N = length(data); % Length of the signal
-Y = fft(data); % Compute FFT
-
-% Step 3: Plot the FFT
-f = Fs*(0:(N/2))/N; % Frequency axis
-magnitude = abs(Y(1:N/2+1)); % Compute the magnitude of the FFT
-plot(f, magnitude);
-title('Single-Sided Amplitude Spectrum');
+hfig = figure;
+plot(frequencies, amplitude_spectrum_2, 'LineWidth', 2);
+axis([0 1000 0 0.004]);
+title('FFT Tracking Error PID With Error');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Position Error With Disturbance (mm)');
+hold on
+
+[maxY, maxIndex] = max(amplitude_spectrum_2);
+maxX = frequencies(maxIndex);
+
+% Plot a red dot at the maximum point
+plot(maxX, maxY, 'ro', 'MarkerSize', 7);
+
+% Display the maximum point
+text(maxX+2, maxY, [' Amplitude = ' num2str(maxY) ' mm'], 'Color', 'red');
+
+% Show the plot
+grid on;
+% Show the plot
+grid on;
+
+pictureWidth = 15;
+hw_ratio = 0.65;
+set(findall(hfig, '-property', 'Fontsize'), 'Fontsize', 12)
+set(findall(hfig, '-property', 'Box'), 'Box', 'on')
+set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex')
+set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex')
+set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
+pos = get(hfig, 'Position');
+set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
+print(hfig,'FFT with','-dpdf','-painters','-fillpage')
 

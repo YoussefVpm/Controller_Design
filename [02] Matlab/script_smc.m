@@ -116,3 +116,9 @@ plotTitle = 'FFT Tracking Error ST-SMC';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);
 
+% % plot FFT disturbance 1500
+% signal = SMC_out.SMC_out.signals(3).values;
+% plotTitle = 'FFT Disturbance';
+% yLabel = 'Position Error of Disturbance';
+% plotfft(signal, plotTitle, yLabel);
+
