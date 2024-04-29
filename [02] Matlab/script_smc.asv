@@ -91,7 +91,7 @@ RMSE_S_SMC = sqrt(mean(SMC_out.SMC_out.signals(2).values.^2));
 RMSE_ST_SMC = sqrt(mean(SMC_out.SMC_out.signals(3).values.^2));
 
 % Bar chart
-names = categorical({'Classical SMC','Sigmoid SMC','ST-SMC'});
+names = categorical({'Classical SMC','Sigmoid SMC','ST-SMC'});2
 RMSE_values = [RMSE_C_SMC RMSE_S_SMC RMSE_ST_SMC];
 bar(names,RMSE_values, 0.5, 'FaceColor', "#4DBEEE")
 ylim([0 0.006]);
@@ -116,6 +116,9 @@ plotTitle = 'FFT Tracking Error ST-SMC';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);
 
-%% FFT of disturbance error
-signal = SMC_out.SMC_out.signals().values;
+% % plot FFT disturbance 1500
+% signal = SMC_out.SMC_out.signals(3).values;
+% plotTitle = 'FFT Disturbance';
+% yLabel = 'Position Error of Disturbance';
+% plotfft(signal, plotTitle, yLabel);
 

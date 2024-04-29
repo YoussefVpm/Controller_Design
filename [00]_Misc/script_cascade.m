@@ -22,6 +22,8 @@ Td = 0.0012;
 
 % load cutting force data
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut1500down.csv')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut2500down.csv')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut3500down.csv')
 
 % Define a transfer function with time delay
 numerator = A;             
@@ -66,6 +68,25 @@ PI_TF = tf(numerator_PI, denominator_PI);
 % velocity open and closed loop
 V_OP = PI_TF*V_series;
 V_CL = feedback(V_OP, 1);
+
+%% Position loop
+
+% position open loop
+P_series = (PI_TF*sys)/(1+(PI_TF*sys*V_est));
+
+% siso tool init
+% sisotool(P_series);
+
+% position openloop
+pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
+load(pathPosition);
+gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
+
+disp(gain_P);
+
+% position open and closed loop
+P_OP = gain_P*P_series;
+P_CL = feedback(P_OP, 1);
 
 %% Figure for Thesis book: Velocity
 
@@ -177,25 +198,6 @@ pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity','-dpdf','-painters','-fillpage')
 
-%% Position loop
-
-% position open loop
-P_series = (PI_TF*sys)/(1+(PI_TF*sys*V_est));
-
-% siso tool init
-% sisotool(P_series);
-
-% position openloop
-pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
-load(pathPosition);
-gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
-
-disp(gain_P);
-
-% position open and closed loop
-P_OP = gain_P*P_series;
-P_CL = feedback(P_OP, 1);
-
 %% Figure for Thesis book: Position
 
 %%_____MARGIN_____%%
@@ -278,9 +280,7 @@ pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
 
-%% Sensitivity and Validation
-
-%%_____SENSITIVITY_____
+%%_____SENSITIVITY_____%%
 
 hfig = figure;
 Spl = 1 / (1 + P_OP);
@@ -307,11 +307,14 @@ pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity Posi OL','-dpdf','-painters','-fillpage')
 
-%%_____Controller Validation_____
+%% Error Validation
 
 hfig = figure;
 Error = 5*(1+(PI_TF*sys*V_est))/(1+(PI_TF*sys*V_est)+(gain_P*PI_TF*sys));
 bodemag(Error);
+% Spid = 1 / (1 + sys_OP);
+% bodemag(Spid);
+% axis([1 2000 -35 10]);
 grid on
 
 h = findall(gcf,'Type','line');

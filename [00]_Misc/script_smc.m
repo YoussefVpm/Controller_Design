@@ -46,28 +46,28 @@ lamda = 600;
 lamdast = 850;
 
 %% Data Plots
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out with.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out.mat')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out without.mat')
 
 %________Maximum Tracking Error_________%
 
 % classical SMC
-xData = SMC_out_with.SMC_out.time;
-yData = SMC_out_with.SMC_out.signals(1).values;
+xData = SMC_out.SMC_out.time;
+yData = SMC_out.SMC_out.signals(1).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error Classical SMC (mm)';
 title = 'Tracking Error of Classical SMC';
 plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
 
 % Simoid SMC
-yData = SMC_out_with.SMC_out.signals(2).values;
+yData = SMC_out.SMC_out.signals(2).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error Simoid SMC (mm)';
 title = 'Tracking Error of Simoid SMC';
 plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
 
 % ST SMC
-yData = SMC_out_with.SMC_out.signals(3).values;
+yData = SMC_out.SMC_out.signals(3).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error ST SMC (mm)';
 title = 'Tracking Error of ST SMC';
@@ -82,36 +82,13 @@ ylim([0 0.008]);
 
 ylabel('Position Error MTE (mm)');
 
-%% MTE without
-% classical SMC
-xData = SMC_out_without.SMC_out.time;
-yData = SMC_out_without.SMC_out.signals(1).values;
-xLabel = 'Time (s)';
-yLabel = 'Position Error Classical SMC (mm)';
-title = 'Tracking Error of Classical SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
-
-% Simoid SMC
-yData = SMC_out_without.SMC_out.signals(2).values;
-xLabel = 'Time (s)';
-yLabel = 'Position Error Simoid SMC (mm)';
-title = 'Tracking Error of Simoid SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
-
-% ST SMC
-yData = SMC_out_without.SMC_out.signals(3).values;
-xLabel = 'Time (s)';
-yLabel = 'Position Error ST SMC (mm)';
-title = 'Tracking Error of ST SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
-
 %% _ROOT MEAN SQAURE ERROR_%
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out with.mat')
+load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out.mat')
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out without.mat')
 
-RMSE_C_SMC = sqrt(mean(SMC_out_with.SMC_out.signals(1).values.^2));
-RMSE_S_SMC = sqrt(mean(SMC_out_with.SMC_out.signals(2).values.^2));
-RMSE_ST_SMC = sqrt(mean(SMC_out_with.SMC_out.signals(3).values.^2));
+RMSE_C_SMC = sqrt(mean(SMC_out.SMC_out.signals(1).values.^2));
+RMSE_S_SMC = sqrt(mean(SMC_out.SMC_out.signals(2).values.^2));
+RMSE_ST_SMC = sqrt(mean(SMC_out.SMC_out.signals(3).values.^2));
 
 % Bar chart
 names = categorical({'Classical SMC','Sigmoid SMC','ST-SMC'});
@@ -121,42 +98,20 @@ ylim([0 0.006]);
 grid on
 
 ylabel('Position Error RMSE (mm)');
-disp(RMSE_C_SMC)
-disp(RMSE_S_SMC)
-disp(RMSE_ST_SMC)
-
-%% RMSE Without
-
-RMSE_C_SMC = sqrt(mean(SMC_out_without.SMC_out.signals(1).values.^2));
-RMSE_S_SMC = sqrt(mean(SMC_out_without.SMC_out.signals(2).values.^2));
-RMSE_ST_SMC = sqrt(mean(SMC_out_without.SMC_out.signals(3).values.^2));
-
-% Bar chart
-names = categorical({'Classical SMC','Sigmoid SMC','ST-SMC'});
-RMSE_values = [RMSE_C_SMC RMSE_S_SMC RMSE_ST_SMC];
-bar(names,RMSE_values, 0.5, 'FaceColor', "#4DBEEE")
-ylim([0 0.006]);
-grid on
-
-ylabel('Position Error RMSE (mm)');
-disp(RMSE_C_SMC)
-disp(RMSE_S_SMC)
-disp(RMSE_ST_SMC)
-
 
 %% _Fast Fourier Transform_%
 
-signal = SMC_out_with.SMC_out.signals(1).values;
+signal = SMC_out.SMC_out.signals(1).values;
 plotTitle = 'FFT Tracking Error Classical SMC';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);
 
-signal = SMC_out_with.SMC_out.signals(2).values;
+signal = SMC_out.SMC_out.signals(2).values;
 plotTitle = 'FFT Tracking Error Sigmoid-SMC';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);
 
-signal = SMC_out_with.SMC_out.signals(3).values;
+signal = SMC_out.SMC_out.signals(3).values;
 plotTitle = 'FFT Tracking Error ST-SMC';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);

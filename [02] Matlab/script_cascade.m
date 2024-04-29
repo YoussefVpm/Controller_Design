@@ -22,8 +22,6 @@ Td = 0.0012;
 
 % load cutting force data
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut1500down.csv')
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut2500down.csv')
-load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cutting forces\Cut3500down.csv')
 
 % Define a transfer function with time delay
 numerator = A;             
@@ -69,25 +67,6 @@ PI_TF = tf(numerator_PI, denominator_PI);
 V_OP = PI_TF*V_series;
 V_CL = feedback(V_OP, 1);
 
-%% Position loop
-
-% position open loop
-P_series = (PI_TF*sys)/(1+(PI_TF*sys*V_est));
-
-% siso tool init
-% sisotool(P_series);
-
-% position openloop
-pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
-load(pathPosition);
-gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
-
-disp(gain_P);
-
-% position open and closed loop
-P_OP = gain_P*P_series;
-P_CL = feedback(P_OP, 1);
-
 %% Figure for Thesis book: Velocity
 
 %%_____MARGIN_____%%
@@ -112,7 +91,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-print(hfig,'margin Velo OL','-dpdf','-painters','-fillpage')
+% print(hfig,'margin Velo OL','-dpdf','-painters','-fillpage')
 
 %%_____NYQUIST_____%%
 
@@ -143,7 +122,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-print(hfig,'nyquist Velo OL','-dpdf','-painters','-fillpage')
+% print(hfig,'nyquist Velo OL','-dpdf','-painters','-fillpage')
 
 %%_____BODE CL_____%%
 
@@ -167,7 +146,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
+% print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
 
 %%_____SENSITIVITY_____%%
 
@@ -197,6 +176,25 @@ set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*picture
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity','-dpdf','-painters','-fillpage')
+
+%% Position loop
+
+% position open loop
+P_series = (PI_TF*sys)/(1+(PI_TF*sys*V_est));
+
+% siso tool init
+% sisotool(P_series);
+
+% position openloop
+pathPosition = 'E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\Cascade design position loop.mat';
+load(pathPosition);
+gain_P = ControlSystemDesignerSession.DesignerData.Designs.Data.C.K;
+
+disp(gain_P);
+
+% position open and closed loop
+P_OP = gain_P*P_series;
+P_CL = feedback(P_OP, 1);
 
 %% Figure for Thesis book: Position
 
@@ -280,7 +278,9 @@ pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
 
-%%_____SENSITIVITY_____%%
+%% Sensitivity and Validation
+
+%%_____SENSITIVITY_____
 
 hfig = figure;
 Spl = 1 / (1 + P_OP);
@@ -307,14 +307,11 @@ pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
 % print(hfig,'sensitivity Posi OL','-dpdf','-painters','-fillpage')
 
-%% Error Validation
+%%_____Controller Validation_____
 
 hfig = figure;
 Error = 5*(1+(PI_TF*sys*V_est))/(1+(PI_TF*sys*V_est)+(gain_P*PI_TF*sys));
 bodemag(Error);
-% Spid = 1 / (1 + sys_OP);
-% bodemag(Spid);
-% axis([1 2000 -35 10]);
 grid on
 
 h = findall(gcf,'Type','line');
@@ -377,11 +374,15 @@ load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Mat
 
 RMSE_with = sqrt(mean(out_with.cascade.signals(2).values.^2));
 RMSE_without = sqrt(mean(out_without.cascade.signals(2).values.^2));
-percentage_variation = ((RMSE_with - RMSE_without)/RMSE_without)*100;
+percentage_variation = ((RMSE_with - RMSE_without)/RMSE_with)*100;
 
-disp(RMSE_with)
-disp(RMSE_without)
-disp(percentage_variation)
+names = categorical({'with disturbance','without disturbance'});
+RMSE_values = [RMSE_with RMSE_without];
+bar(names,RMSE_values, 0.5, 'FaceColor', "#4DBEEE")
+ylim([0 RMSE_with + 0.0015]);
+text(names, RMSE_values, num2str(RMSE_values'), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+text(1.5, 0.001, [num2str(percentage_variation), '%'], 'HorizontalAlignment', 'center', 'FontSize', 14);
+grid on
 
 %% _____FAST FOURIER TRANSFORM_____
 
@@ -410,7 +411,7 @@ plot(out_ffw.cascase_ffw.time, out_ffw.cascase_ffw.signals(1).values, 'LineWidth
 hold on
 plot(out_ffw.cascase_ffw.time, out_ffw.cascase_ffw.signals(2).values, 'LineWidth', 1, 'Color', 'red');
 grid on
-axis([0 5 -1 1]);
+axis([0 15 -1 1]);
 xlabel('Time (s)')
 ylabel('Position Error with and without FFW (mm)');
 title('Cutting Force Input Disturbance at 1500 RPM');
