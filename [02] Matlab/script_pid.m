@@ -92,7 +92,7 @@ grid on
 xlabel('Time');
 ylabel('Amplitude, Y(t) (mm)');
 title('Unit Step Response of Design');
-legend('Design');
+legend('Design 2');
 
 step_info = stepinfo(sys_CL);
 
@@ -124,12 +124,13 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'Step response','-dpdf','-painters','-fillpage')
+print(hfig,'Step response','-dpdf','-painters','-fillpage')
 
 %_____MARGIN_____
 
 hfig = figure;
 margin(sys_OP);
+grid on
 
 h = findall(gcf,'Type','line');
 
@@ -148,7 +149,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'margin','-dpdf','-painters','-fillpage')
+print(hfig,'margin','-dpdf','-painters','-fillpage')
 
 %_____NYQUIST_____
 
@@ -179,12 +180,13 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'nyquist','-dpdf','-painters','-fillpage')
+print(hfig,'nyquist','-dpdf','-painters','-fillpage')
 
 %_____BODE_____
 
 hfig = figure;
 bode(sys_CL);
+grid on
 
 h = findall(gcf,'Type','line');
 
@@ -203,7 +205,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'Bode closed loop','-dpdf','-painters','-fillpage')
+print(hfig,'Bode closed loop','-dpdf','-painters','-fillpage')
 
 
 %% Sensitivity and Validation 
@@ -281,12 +283,13 @@ plotn(out_with.PID.time, out_with.PID.signals(3).values, titleText)
 
 %_____Maximum Tracking Error_____%
 
+save = 'yes';
 xData = out_with.PID.time;
 yData = out_with.PID.signals(2).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error With Disturbance (mm)';
 titleText = 'PID Tracking Error';
-plotmte(xData, yData, xLabel, yLabel, titleText, 'error with', 'no');
+plotmte(xData, yData, xLabel, yLabel, titleText, 'error with', save);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -295,7 +298,7 @@ yData = out_without.PID.signals(2).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error Without Disturbance (mm)';
 titleText = 'PID Tracking Error';
-plotmte(xData, yData, xLabel, yLabel, titleText, 'error without', 'no');
+plotmte(xData, yData, xLabel, yLabel, titleText, 'error without', save);
 
 %% _____ROOT MEAN SQAURE ERROR_____
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\PID out with.mat')
@@ -316,7 +319,7 @@ grid on
 %% _____Fast Fourier Transform_____
 
 signal = out_with.PID.signals(2).values;
-plotTitle = 'FFT Tracking Error PID With Error';
+plotTitle = 'FFT Tracking Error of PID';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);
 
@@ -324,7 +327,7 @@ plotfft(signal, plotTitle, yLabel);
 
 % plot FFT disturbance 1500 rpm
 signal = out_with.PID.signals(1).values;
-plotTitle = 'FFT Disturbance';
+plotTitle = 'FFT of Cutting Disturbance Force at 1500 rpm';
 yLabel = 'Position Error of Disturbance';
 plotfft(signal, plotTitle, yLabel);
 

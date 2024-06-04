@@ -51,27 +51,28 @@ load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Mat
 
 %________Maximum Tracking Error_________%
 
+save = 'yes';
 % classical SMC
 xData = SMC_out_with.SMC_out.time;
 yData = SMC_out_with.SMC_out.signals(1).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error Classical SMC (mm)';
 title = 'Tracking Error of Classical SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
+plotmte(xData, yData, xLabel, yLabel, title, 'CSMC error with', save);
 
 % Simoid SMC
 yData = SMC_out_with.SMC_out.signals(2).values;
 xLabel = 'Time (s)';
-yLabel = 'Position Error Simoid SMC (mm)';
-title = 'Tracking Error of Simoid SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
+yLabel = 'Position Error Sigmoid SMC (mm)';
+title = 'Tracking Error of Sigmoid SMC';
+plotmte(xData, yData, xLabel, yLabel, title, 'SSMC error with', save);
 
 % ST SMC
 yData = SMC_out_with.SMC_out.signals(3).values;
 xLabel = 'Time (s)';
-yLabel = 'Position Error ST SMC (mm)';
-title = 'Tracking Error of ST SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
+yLabel = 'Position Error ST-SMC (mm)';
+title = 'Tracking Error of ST-SMC';
+plotmte(xData, yData, xLabel, yLabel, title, 'STSMC error with', save);
 
 % Bar chart
 figure
@@ -89,21 +90,21 @@ yData = SMC_out_without.SMC_out.signals(1).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error Classical SMC (mm)';
 title = 'Tracking Error of Classical SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
+plotmte(xData, yData, xLabel, yLabel, title, 'CSMC error without', save);
 
 % Simoid SMC
 yData = SMC_out_without.SMC_out.signals(2).values;
 xLabel = 'Time (s)';
-yLabel = 'Position Error Simoid SMC (mm)';
-title = 'Tracking Error of Simoid SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
+yLabel = 'Position Error Sigmoid SMC (mm)';
+title = 'Tracking Error of Sigmoid SMC';
+plotmte(xData, yData, xLabel, yLabel, title, 'SSMC error without', save);
 
 % ST SMC
 yData = SMC_out_without.SMC_out.signals(3).values;
 xLabel = 'Time (s)';
-yLabel = 'Position Error ST SMC (mm)';
-title = 'Tracking Error of ST SMC';
-plotmte(xData, yData, xLabel, yLabel, title, 'SMCCCC', 'no');
+yLabel = 'Position Error ST-SMC (mm)';
+title = 'Tracking Error of ST-SMC';
+plotmte(xData, yData, xLabel, yLabel, title, 'STSMC error without', save);
 
 %% _ROOT MEAN SQAURE ERROR_%
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\SMC out with.mat')
@@ -167,3 +168,31 @@ plotfft(signal, plotTitle, yLabel);
 % yLabel = 'Position Error of Disturbance';
 % plotfft(signal, plotTitle, yLabel);
 
+%% line graph
+
+% Define the data points
+points = [0.001, 0.03, 0.888]; % y-values
+labels = {'A', 'B', 'C'}; % Corresponding labels
+
+% Generate x-values (assuming they are equally spaced for simplicity)
+x = 1:length(points);
+
+% Create the plot
+figure; % Create a new figure window
+plot(x, points, 'b-o', 'LineWidth', 2, 'MarkerSize', 10); % Plot the data with a blue line and circle markers
+
+% Add titles and labels
+title('Line Graph of Given Points');
+xlabel('Index');
+ylabel('Value');
+
+% Add text labels to the points
+for i = 1:length(points)
+    text(x(i), points(i), labels{i}, 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right', 'FontSize', 12);
+end
+
+% Add grid lines
+grid on;
+
+% Display the plot
+shg; % Show graph window

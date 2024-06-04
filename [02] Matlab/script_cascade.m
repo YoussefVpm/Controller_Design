@@ -73,6 +73,7 @@ V_CL = feedback(V_OP, 1);
 
 hfig = figure;
 margin(V_OP);
+grid on
 
 h = findall(gcf,'Type','line');
 
@@ -98,7 +99,6 @@ set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',
 hfig = figure;
 nyquist(V_OP);
 axis([-1.5 1.5 -1 1]);
-grid off
 
 h = findall(gcf,'Type','line');
 
@@ -128,6 +128,7 @@ set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',
 
 hfig = figure;
 bode(V_CL);
+grid on
 
 h = findall(gcf,'Type','line');
 
@@ -146,7 +147,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
+print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
 
 %%_____SENSITIVITY_____%%
 
@@ -204,6 +205,7 @@ close all
 
 hfig = figure;
 margin(P_OP);
+grid on
 
 h = findall(gcf,'Type','line');
 
@@ -222,7 +224,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'margin Posi OL','-dpdf','-painters','-fillpage')
+print(hfig,'margin Posi OL','-dpdf','-painters','-fillpage')
 
 %%_____NYQUIST_____%%
 hfig = figure;
@@ -252,12 +254,13 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'nyquist Posi OL','-dpdf','-painters','-fillpage')
+print(hfig,'nyquist Posi OL','-dpdf','-painters','-fillpage')
 
 %%_____BODE CL_____%%
 
 hfig = figure;
 bode(P_CL);
+grid on
 
 h = findall(gcf,'Type','line');
 
@@ -276,7 +279,7 @@ set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 
 set(hfig, 'Units', 'Centimeters', 'Position', [3 3 pictureWidth hw_ratio*pictureWidth])
 pos = get(hfig, 'Position');
 set (hfig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'centimeters','Papersize',[pos(3),pos(4)])
-% print(hfig,'Bode Velo CL','-dpdf','-painters','-fillpage')
+print(hfig,'Bode Posi CL','-dpdf','-painters','-fillpage')
 
 %% Sensitivity and Validation
 
@@ -317,7 +320,7 @@ grid on
 h = findall(gcf,'Type','line');
 
 % Modify the linewidth of the lines
-newLinewidth = 1.5;  % Adjust this value as needed
+newLinewidth = 2;  % Adjust this value as needed
 for i = 1:length(h)
     set(h(i), 'LineWidth', newLinewidth);
 end
@@ -341,23 +344,24 @@ load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Mat
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out without.mat')
 
 % Disturbance
-titleText = 'Cutting Force Input Disturbance at 1500 RPM';
-plotn(out_with.cascade.time, out_with.cascade.signals(1).values, titleText)
+% titleText = 'Cutting Force Input Disturbance at 1500 RPM';
+% plotn(out_with.cascade.time, out_with.cascade.signals(1).values, titleText)
 
 % Reference
-titleText = 'Input Reference';
-plotn(out_with.cascade.time, out_with.cascade.signals(3).values, titleText)
+% titleText = 'Input Reference';
+% plotn(out_with.cascade.time, out_with.cascade.signals(3).values, titleText)
 
 %_____ERROR_____%
 
 %_____Maximum Tracking Error_____%
 
+save = 'yes';
 xData = out_with.cascade.time;
 yData = out_with.cascade.signals(2).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error With Disturbance (mm)';
 titleText = 'Cascade Tracking Error';
-plotmte(xData, yData, xLabel, yLabel, titleText, 'error with', 'no');
+plotmte(xData, yData, xLabel, yLabel, titleText, 'error with', save);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -366,7 +370,8 @@ yData = out_without.cascade.signals(2).values;
 xLabel = 'Time (s)';
 yLabel = 'Position Error Without Disturbance (mm)';
 titleText = 'Cascade Tracking Error';
-plotmte(xData, yData, xLabel, yLabel, titleText, 'error without', 'no');
+plotmte(xData, yData, xLabel, yLabel, titleText, 'error without', save);
+
 
 %% _____ROOT MEAN SQAURE ERROR_____
 load('E:\[003] Undergrad\7TH SEMESTER\Bachelor Thesis\Controller_Design\[02] Matlab\cascade out with.mat')
@@ -386,8 +391,8 @@ grid on
 
 %% _____FAST FOURIER TRANSFORM_____
 
-signal = out_with.cascade.signals(2).values;
-plotTitle = 'FFT Tracking Error cascade With Error';
+signal = out_without.cascade.signals(2).values;
+plotTitle = 'FFT Tracking Error cascade With disturbance';
 yLabel = 'Position Error With Disturbance (mm)';
 plotfft(signal, plotTitle, yLabel);
 
